@@ -17,7 +17,7 @@ class VideoServerRunnerThread {
     private val TAG = "JBBTRUN"
 
     private var connectThread : ConnectedThread? = null
-    private var handler : Handler? = null
+    private lateinit var handler : Handler
 
     fun connect(socket : BluetoothSocket, handler : Handler) {
         connectThread = ConnectedThread( socket, handler )
@@ -56,7 +56,7 @@ class VideoServerRunnerThread {
                 val readMsg = handler.obtainMessage(
                     MESSAGE_READ, numBytes, -1,
                     mmBuffer)
-                readMsg.sendToTarget()
+//                readMsg.sendToTarget()
             }
         }
 
