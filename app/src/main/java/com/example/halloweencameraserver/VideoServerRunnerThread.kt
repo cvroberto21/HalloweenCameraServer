@@ -58,8 +58,7 @@ class VideoServerRunnerThread {
                 val readMsg = handler.obtainMessage(
                     MESSAGE_READ, numBytes, -1,
                     mmBuffer)
-//                readMsg.sendToTarget()
-                activity.message
+                readMsg.sendToTarget()
             }
         }
 

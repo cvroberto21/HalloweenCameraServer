@@ -86,7 +86,6 @@ class MainFragment : Fragment() {
     override fun onPause() {
         stopBluetoothThread()
         videoServer?.cancel()
-        videoServer = null
 
         super.onPause()
     }
