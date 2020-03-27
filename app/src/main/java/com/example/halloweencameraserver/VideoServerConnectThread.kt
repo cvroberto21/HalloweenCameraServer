@@ -14,7 +14,6 @@ class VideoServerConnectThread( device: BluetoothDevice, private val handler: Ha
     //private val SPP_UUID = "00001101-0000-1000-8000-00805f9b34fb"
     private val VIDEO_SERVER_UUID = "00001101-0000-1000-8000-00805f9b34ff"
 
-
     val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
     private var connectThread : ConnectThread? = null
 
@@ -40,7 +39,7 @@ class VideoServerConnectThread( device: BluetoothDevice, private val handler: Ha
 
         override fun run() {
             // Keep listening until exception occurs or a socket is returned.
-            mmServerSocket = bluetoothAdapter?.listenUsingInsecureRfcommWithServiceRecord("JBVIDEO", UUID.fromString(VIDEO_SERVER_UUID) )
+            mmServerSocket = bluetoothAdapter?.listenUsingRfcommWithServiceRecord("JBVIDEO", UUID.fromString(VIDEO_SERVER_UUID) )
 
             var shouldLoop = true
             while (shouldLoop) {
@@ -57,7 +56,6 @@ class VideoServerConnectThread( device: BluetoothDevice, private val handler: Ha
                 // The connection attempt succeeded. Perform work associated with
                 // the connection in a separate thread.
                 videoServerRunnerThread?.connect(it, handler)
-
                     mmServerSocket?.close()
                     shouldLoop = false
                 }

@@ -57,7 +57,7 @@ class MainFragment : Fragment() {
                     //val deviceHardwareAddress = device.address // MAC address
                     //val PEER_NAME = "JB_Canary"
                     //val PEER_NAME = "JB_Flash"
-                    val PEER_NAME = "JB_Robin"
+                    val PEER_NAME = "JB_Flash"
 
                     if (device.name == PEER_NAME) {
                         peer = device
