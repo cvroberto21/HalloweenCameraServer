@@ -7,6 +7,8 @@ import android.util.Log
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import kotlinx.android.synthetic.main.main_fragment.message
+import kotlinx.android.synthetic.main.main_fragment.view.message
 
 const val MESSAGE_READ: Int = 0
 const val MESSAGE_WRITE: Int = 1
@@ -57,6 +59,7 @@ class VideoServerRunnerThread {
                     MESSAGE_READ, numBytes, -1,
                     mmBuffer)
 //                readMsg.sendToTarget()
+                activity.message
             }
         }
 
