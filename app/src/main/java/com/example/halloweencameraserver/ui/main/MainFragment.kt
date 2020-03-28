@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.halloweencameraserver.R
 import com.example.halloweencameraserver.VideoServerConnectThread
+import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
     private val TAG = "JBBTSERVER"
@@ -86,7 +87,6 @@ class MainFragment : Fragment() {
     override fun onPause() {
         stopBluetoothThread()
         videoServer?.cancel()
-
         super.onPause()
     }
 
