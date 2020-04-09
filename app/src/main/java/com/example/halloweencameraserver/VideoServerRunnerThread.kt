@@ -18,22 +18,22 @@ class VideoServerRunnerThread {
         const val MESSAGE_TOAST: Int = 2
 // ... (Add other message types here as needed.)
     }
-    
+
     lateinit private var connectThread : ConnectedThread
     private lateinit var handler : Handler
 
     fun connect(socket : BluetoothSocket, handler : Handler) {
         connectThread = ConnectedThread( socket, handler )
         this.handler = handler
-        connectThread?.start()
+        connectThread.start()
     }
 
     fun disconnect( ) {
-        connectThread?.cancel()
+        connectThread.cancel()
     }
 
     fun write(bytes: ByteArray) {
-        connectThread?.write( bytes )
+        connectThread.write( bytes )
     }
 
     private inner class ConnectedThread(private val mmSocket: BluetoothSocket, private val handler : Handler) : Thread() {
