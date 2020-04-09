@@ -8,15 +8,18 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
-const val MESSAGE_READ: Int = 0
-const val MESSAGE_WRITE: Int = 1
-const val MESSAGE_TOAST: Int = 2
-// ... (Add other message types here as needed.)
 
 class VideoServerRunnerThread {
     private val TAG = "JBBTRUN"
 
-    private var connectThread : ConnectedThread? = null
+    companion object {
+        const val MESSAGE_READ: Int = 0
+        const val MESSAGE_WRITE: Int = 1
+        const val MESSAGE_TOAST: Int = 2
+// ... (Add other message types here as needed.)
+    }
+    
+    lateinit private var connectThread : ConnectedThread
     private lateinit var handler : Handler
 
     fun connect(socket : BluetoothSocket, handler : Handler) {
@@ -63,10 +66,11 @@ class VideoServerRunnerThread {
         // Call this from the main activity to send data to the remote device.
         fun write(bytes: ByteArray) {
             Log.d(TAG, "Output stream sendng data $bytes" )
+
             try {
                 mmOutStream.write(bytes)
             } catch (e: IOException) {
-                Log.e(TAG, "Error occurred when sending data", e)
+                Log.e( TAG, "Error occurred when sending data", e)
 
                 // Send a failure message back to the activity.
                 val writeErrorMsg = handler.obtainMessage(MESSAGE_TOAST)
