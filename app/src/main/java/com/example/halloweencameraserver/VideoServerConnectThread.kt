@@ -51,13 +51,13 @@ class VideoServerConnectThread( device: BluetoothDevice, private val handler: Ha
                     null
                 }
                 socket?.also {
-                videoServerRunnerThread = VideoServerRunnerThread()
+                    videoServerRunnerThread = VideoServerRunnerThread()
 
-                // The connection attempt succeeded. Perform work associated with
-                // the connection in a separate thread.
-                videoServerRunnerThread?.connect(it, handler)
-                    mmServerSocket?.close()
-                    shouldLoop = false
+                    // The connection attempt succeeded. Perform work associated with
+                    // the connection in a separate thread.
+                    videoServerRunnerThread?.connect(it, handler)
+                        mmServerSocket?.close()
+                        shouldLoop = false
                 }
             }
         }
@@ -65,6 +65,7 @@ class VideoServerConnectThread( device: BluetoothDevice, private val handler: Ha
         // Closes the connect socket and causes the thread to finish.
         fun cancel() {
             videoServerRunnerThread?.disconnect()
+
             videoServerRunnerThread = null
             try {
                 mmServerSocket?.close()

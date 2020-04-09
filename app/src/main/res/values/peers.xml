@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="peers">
+        <item>JB_Flash</item>
+        <item>JB_Hawk</item>
+        <item>JB_Robin</item>
+        <item>JB_Canary</item>
+    </array>
+</resources>

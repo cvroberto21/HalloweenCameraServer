@@ -1,7 +1,9 @@
 package com.example.halloweencameraserver
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Color.argb
 import android.graphics.Paint
 import android.graphics.Rect
 import android.text.TextUtils
@@ -9,6 +11,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import androidx.core.graphics.set
+import androidx.core.graphics.toColorInt
 
 class SurfaceViewThread(context: Context?, attr: AttributeSet? ) : SurfaceView( context, attr ),
     SurfaceHolder.Callback, Runnable {
@@ -54,6 +58,7 @@ class SurfaceViewThread(context: Context?, attr: AttributeSet? ) : SurfaceView( 
                 textY = 0f
             }
             drawText()
+            drawBitmap( bitmap )
             val endTime = System.currentTimeMillis()
             val deltaTime = endTime - startTime
             if (deltaTime < 200) {
@@ -66,17 +71,36 @@ class SurfaceViewThread(context: Context?, attr: AttributeSet? ) : SurfaceView( 
         }
     }
 
-    private fun drawText() {
+    fun drawBitmap( bitmap : Bitmap) {
+        val bwidth = bitmap.width
+        val bheight = bitmap.height
+        val r = Rect( 0, 0, bwidth, bheight )
+        val canvas = this.holder.lockCanvas()
+        // Draw the specify canvas background color.
+        val paint = Paint()
+
+//        for(i in 0..240-1) {
+//            for( j in 0..320-1) {
+//                bitmap.set(j,i, argb(255, 255, 100, 0) )
+//            }
+//        }
+        canvas.drawBitmap( bitmap, 0.0f, 0.0f, null )
+        // Send message to main UI thread to update the drawing to the main view special area.
+        this.holder.unlockCanvasAndPost(canvas)
+    }
+
+    fun drawText() {
         val margin = 100
         val right = width - margin
         val bottom = height - margin
         val rect = Rect(margin, margin, right, bottom)
         // Only draw text on the specified rectangle area.
         val canvas = this.holder.lockCanvas(rect)
+
         // Draw the specify canvas background color.
-        val backgroundPaint = Paint()
-        backgroundPaint.setColor(Color.BLUE)
-        canvas.drawRect(rect, backgroundPaint)
+        //val backgroundPaint = Paint()
+        //backgroundPaint.setColor(Color.BLUE)
+        //canvas.drawRect(rect, backgroundPaint)
         // Draw text in the canvas.
         canvas.drawText(text, textX, textY, paint)
         // Send message to main UI thread to update the drawing to the main view special area.
@@ -88,6 +112,7 @@ class SurfaceViewThread(context: Context?, attr: AttributeSet? ) : SurfaceView( 
     }
 
     private val paint: Paint
+    private val bitmap : Bitmap
 
     init {
         isFocusable = true
@@ -99,7 +124,14 @@ class SurfaceViewThread(context: Context?, attr: AttributeSet? ) : SurfaceView( 
         paint.setTextSize(100f)
         paint.setColor(Color.GREEN)
         // Set the SurfaceView object at the top of View object.
-        setZOrderOnTop(true)
         //setBackgroundColor(Color.RED);
+        bitmap = Bitmap.createBitmap( 320, 240, Bitmap.Config.ARGB_8888)
+        //bitmap.setPixels( pixmap, 0, 320, 0, 0, 320, 240  )
+        for(i in 0 until 240) {
+            for( j in 0 until 320) {
+                bitmap.set(j,i, argb(255, 0, 255, 0) )
+            }
+        }
+        setZOrderOnTop(true)
     }
 }
