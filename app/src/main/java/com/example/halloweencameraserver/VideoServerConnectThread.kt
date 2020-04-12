@@ -9,7 +9,11 @@ import android.util.Log
 import java.io.IOException
 import java.util.*
 
-class VideoServerConnectThread( device: BluetoothDevice, private val handler: Handler ) {
+class VideoServerConnectThread(
+    device: BluetoothDevice,
+    private val handler: Handler,
+    private val uiHandler: Handler  ) {
+
     private val TAG = "JBVidCon"
     //private val SPP_UUID = "00001101-0000-1000-8000-00805f9b34fb"
     private val VIDEO_SERVER_UUID = "00001101-0000-1000-8000-00805f9b34ff"
@@ -18,7 +22,7 @@ class VideoServerConnectThread( device: BluetoothDevice, private val handler: Ha
     private var connectThread : ConnectThread? = null
 
     init {
-        connectThread = ConnectThread( device, handler )
+        connectThread = ConnectThread( device, handler, uiHandler )
         connectThread?.start()
     }
 
@@ -32,7 +36,10 @@ class VideoServerConnectThread( device: BluetoothDevice, private val handler: Ha
         connectThread?.cancel()
     }
 
-    private inner class ConnectThread(private val device: BluetoothDevice, var handler : Handler) : Thread() {
+    private inner class ConnectThread(
+        private val device: BluetoothDevice,
+        var handler : Handler,
+        var uiHandler: Handler ) : Thread() {
 
         private var mmServerSocket: BluetoothServerSocket? = null
 
@@ -54,7 +61,7 @@ class VideoServerConnectThread( device: BluetoothDevice, private val handler: Ha
 
                 // The connection attempt succeeded. Perform work associated with
                 // the connection in a separate thread.
-                videoServerRunnerThread?.connect(it, handler)
+                videoServerRunnerThread?.connect(it, handler, uiHandler )
                     mmServerSocket?.close()
                     shouldLoop = false
                 }

@@ -5,6 +5,9 @@ import android.graphics.Color.argb
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.SurfaceView
+import com.example.halloweencameraserver.ui.main.MainFragment
+import kotlinx.android.synthetic.main.main_fragment.view.*
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -22,11 +25,13 @@ class VideoServerRunnerThread {
     lateinit private var connectThread: ConnectedThread
     lateinit private var handler: Handler
     lateinit private var framebuffer: FrameBuffer
+    lateinit private var uiHandler: Handler
 
-    fun connect(socket: BluetoothSocket, handler: Handler) {
+    fun connect(socket: BluetoothSocket, handler: Handler, uiHandler: Handler ) {
         connectThread = ConnectedThread(socket, handler)
         this.handler = handler
         framebuffer = FrameBuffer(320, 240, FrameBuffer.Type.ARGB8888)
+        this.uiHandler = uiHandler
         connectThread.start()
     }
 
@@ -76,12 +81,10 @@ class VideoServerRunnerThread {
                     r = 0
                 }
 
-
-
-//                // Send the obtained bytes to the UI activity.
-//                handler.obtainMessage(
-//                    MessageTypes.MESSAGE_WRITE.type, framebuffer
-//                )?.apply { sendToTarget() }
+                // Send the obtained bytes to the UI activity.
+                uiHandler?.obtainMessage(
+                    MessageTypes.MESSAGE_WRITE.type, framebuffer
+                )?.apply { sendToTarget() }
             }
         }
 //        while (true) {
@@ -98,6 +101,7 @@ class VideoServerRunnerThread {
 //                    MessageTypes.MESSAGE_WRITE.type, numBytes, -1,
 //                    mmBuffer)
 //                readMsg.sendToTarget()
+
 
         // Call this from the main activity to send data to the remote device.
         fun write(bytes: ByteArray) {

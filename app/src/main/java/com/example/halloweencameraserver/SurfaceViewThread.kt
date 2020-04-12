@@ -6,14 +6,19 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Handler
+import android.os.HandlerThread
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 
-class SurfaceViewThread(context: Context?, attr: AttributeSet?, bluetoothHandler: Handler ) : SurfaceView( context, attr ),
-    SurfaceHolder.Callback, Runnable {
+class SurfaceViewThread(context: Context?, attr: AttributeSet? ) :
+    SurfaceView( context, attr ),
+    SurfaceHolder.Callback,
+    Runnable {
+    private val TAG = "JBSVT"
+
     private var threadRunning = false
     private var textX = 0f
     private var textY = 0f
@@ -66,6 +71,7 @@ class SurfaceViewThread(context: Context?, attr: AttributeSet?, bluetoothHandler
                     Log.e(LOG_TAG, ex.message!!)
                 }
             }
+            uiHandler?.handleMessage( )
         }
     }
 
@@ -126,4 +132,6 @@ class SurfaceViewThread(context: Context?, attr: AttributeSet?, bluetoothHandler
         setZOrderOnTop(true)
         //setBackgroundColor(Color.RED);
     }
+
+    var uiHandler: Handler? = null
 }

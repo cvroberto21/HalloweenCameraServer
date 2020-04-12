@@ -64,27 +64,26 @@ class MainFragment : Fragment() {
                     }
                 }
             }
+
             if (peer != null ) {
                 startBluetoothThread()
-                videoServer = VideoServerConnectThread( peer, bluetoothHandler!! )
+                videoServer = VideoServerConnectThread( peer, bluetoothHandler!!, uiHandler!! )
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
+        startUiHandlerThread()
+        remoteView.uiHandler = uiHandler
 
         connectBluetooth()
-
-        // When the screen is turned off and turned back on, the SurfaceTexture is already
-        // available, and "onSurfaceTextureAvailable" will not be called. In that case, we can open
-        // a camera and start preview from here (otherwise, we wait until the surface is ready in
-        // the SurfaceTextureListener).
     }
 
     override fun onPause() {
-        stopBluetoothThread()
         videoServer?.cancel()
+        stopUiHandlerThread()
+        stopBluetoothThread()
         super.onPause()
     }
 
@@ -105,6 +104,25 @@ class MainFragment : Fragment() {
             bluetoothHandler = null
         } catch( e: InterruptedException ) {
             Log.e( TAG,e.toString() )
+        }
+    }
+
+    private var uiHandlerThread: HandlerThread? = null
+    var uiHandler : Handler? = null
+
+    private fun startUiHandlerThread() {
+        uiHandlerThread = HandlerThread( "UiHandler")
+        uiHandlerThread?.start()
+        uiHandler = Handler( uiHandlerThread!!.looper )
+    }
+
+    private fun stopUiHandlerThread( ) {
+        uiHandlerThread?.quitSafely()
+        try {
+            uiHandlerThread?.join()
+            uiHandlerThread = null
+        } catch( e: InterruptedException ) {
+            Log.e( TAG, e.toString() )
         }
     }
 }
