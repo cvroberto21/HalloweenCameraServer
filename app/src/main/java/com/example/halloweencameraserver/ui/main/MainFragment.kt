@@ -3,7 +3,6 @@ package com.example.halloweencameraserver.ui.main
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
@@ -32,7 +31,6 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        // TODO: Use the ViewModel
     }
 
     private var videoServer: VideoServerConnectThread? = null

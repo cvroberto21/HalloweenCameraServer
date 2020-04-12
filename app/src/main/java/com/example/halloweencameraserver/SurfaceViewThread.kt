@@ -1,21 +1,24 @@
 package com.example.halloweencameraserver
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import android.os.Handler
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 
-class SurfaceViewThread(context: Context?, attr: AttributeSet? ) : SurfaceView( context, attr ),
+class SurfaceViewThread(context: Context?, attr: AttributeSet?, bluetoothHandler: Handler ) : SurfaceView( context, attr ),
     SurfaceHolder.Callback, Runnable {
     private var threadRunning = false
     private var textX = 0f
     private var textY = 0f
     var text = "Hello"
+    lateinit var bitmap : Bitmap
 
     override fun surfaceCreated(surfaceHolder: SurfaceHolder) { // Create the child thread when SurfaceView is created.
         val thread = Thread(this)
@@ -83,6 +86,24 @@ class SurfaceViewThread(context: Context?, attr: AttributeSet? ) : SurfaceView( 
         this.holder.unlockCanvasAndPost(canvas)
     }
 
+    fun drawBitmap( bitmap : Bitmap) {
+        val bwidth = bitmap.width
+        val bheight = bitmap.height
+        val r = Rect( 0, 0, bwidth, bheight )
+        val canvas = this.holder.lockCanvas()
+        // Draw the specify canvas background color.
+        val paint = Paint()
+
+//        for(i in 0..240-1) {
+//            for( j in 0..320-1) {
+//                bitmap.set(j,i, argb(255, 255, 100, 0) )
+//            }
+//        }
+        canvas.drawBitmap( bitmap, 0.0f, 0.0f, null )
+        // Send message to main UI thread to update the drawing to the main view special area.
+        this.holder.unlockCanvasAndPost(canvas)
+    }
+
     companion object {
         private const val LOG_TAG = "SURFACE_VIEW_THREAD"
     }
@@ -91,6 +112,9 @@ class SurfaceViewThread(context: Context?, attr: AttributeSet? ) : SurfaceView( 
 
     init {
         isFocusable = true
+
+        bitmap = Bitmap.createBitmap( width, height, Bitmap.Config.ARGB_8888 )
+
         // Get SurfaceHolder object.
         // Add current object as the callback listener.
         this.holder.addCallback(this)

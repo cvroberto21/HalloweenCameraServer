@@ -36,7 +36,6 @@ class VideoServerConnectThread( device: BluetoothDevice, private val handler: Ha
 
         private var mmServerSocket: BluetoothServerSocket? = null
 
-
         override fun run() {
             // Keep listening until exception occurs or a socket is returned.
             mmServerSocket = bluetoothAdapter?.listenUsingRfcommWithServiceRecord("JBVIDEO", UUID.fromString(VIDEO_SERVER_UUID) )
