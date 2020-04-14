@@ -56,7 +56,8 @@ class MainFragment : Fragment() {
                     //val deviceHardwareAddress = device.address // MAC address
                     //val PEER_NAME = "JB_Canary"
                     //val PEER_NAME = "JB_Flash"
-                    val PEER_NAME = "JB_Flash"
+                    //val PEER_NAME = "JB_Robin"
+                    val PEER_NAME = "JB_Robin"
 
                     if (device.name == PEER_NAME) {
                         peer = device
@@ -113,7 +114,7 @@ class MainFragment : Fragment() {
     private fun startUiHandlerThread() {
         uiHandlerThread = HandlerThread( "UiHandler")
         uiHandlerThread?.start()
-        uiHandler = Handler( uiHandlerThread!!.looper )
+        uiHandler = Handler( uiHandlerThread!!.looper, remoteView )
     }
 
     private fun stopUiHandlerThread( ) {

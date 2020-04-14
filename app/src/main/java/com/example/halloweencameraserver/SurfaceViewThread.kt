@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Message
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
@@ -16,6 +17,7 @@ import android.view.SurfaceView
 class SurfaceViewThread(context: Context?, attr: AttributeSet? ) :
     SurfaceView( context, attr ),
     SurfaceHolder.Callback,
+    Handler.Callback,
     Runnable {
     private val TAG = "JBSVT"
 
@@ -71,7 +73,6 @@ class SurfaceViewThread(context: Context?, attr: AttributeSet? ) :
                     Log.e(LOG_TAG, ex.message!!)
                 }
             }
-            uiHandler?.handleMessage( )
         }
     }
 
@@ -134,4 +135,9 @@ class SurfaceViewThread(context: Context?, attr: AttributeSet? ) :
     }
 
     var uiHandler: Handler? = null
+
+    override fun handleMessage( msg : Message) : Boolean {
+        Log.d(TAG, "Received message type ${msg.what}")
+        return true
+    }
 }
