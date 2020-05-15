@@ -55,8 +55,6 @@ class VideoServerRunnerThread {
         override fun run() {
             var numBytes: Int // bytes returned from read()
 
-            var r : Int = 0
-
             // Keep listening to the InputStream until an exception occurs.
             while (true) {
                 // Read from the InputStream.
@@ -71,15 +69,10 @@ class VideoServerRunnerThread {
                 Log.d(TAG, "Input stream bytes received $numBytes")
                 for (y in 0 until framebuffer.height) {
                     for (x in 0 until framebuffer.width) {
-                        framebuffer.setPixel(x, y, argb(255, r, 20, 200))
+                        framebuffer.setPixel(x, y, argb(0, 255, 20, 200))
                     }
                 }
-                Thread.sleep(500)
-
-                r = r + 1
-                if (r < 0) {
-                    r = 0
-                }
+                //Thread.sleep(500)
 
                 // Send the obtained bytes to the UI activity.
                 uiHandler?.obtainMessage(

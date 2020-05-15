@@ -28,6 +28,9 @@ class SurfaceViewThread(context: Context?, attr: AttributeSet? ) :
     lateinit var bitmap : Bitmap
 
     override fun surfaceCreated(surfaceHolder: SurfaceHolder) { // Create the child thread when SurfaceView is created.
+
+        bitmap = Bitmap.createBitmap( width, height, Bitmap.Config.ARGB_8888 )
+
         val thread = Thread(this)
         // Start to run the child thread.
         thread.start()
@@ -119,8 +122,6 @@ class SurfaceViewThread(context: Context?, attr: AttributeSet? ) :
 
     init {
         isFocusable = true
-
-        bitmap = Bitmap.createBitmap( width, height, Bitmap.Config.ARGB_8888 )
 
         // Get SurfaceHolder object.
         // Add current object as the callback listener.

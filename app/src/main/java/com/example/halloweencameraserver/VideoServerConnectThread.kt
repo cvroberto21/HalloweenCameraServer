@@ -22,6 +22,7 @@ class VideoServerConnectThread(
     private var connectThread : ConnectThread? = null
 
     init {
+        Log.d( TAG, "VideoServerConnectThread init")
         connectThread = ConnectThread( device, handler, uiHandler )
         connectThread?.start()
     }
@@ -44,6 +45,8 @@ class VideoServerConnectThread(
         private var mmServerSocket: BluetoothServerSocket? = null
 
         override fun run() {
+            Log.d( TAG, "VideoServer.ConnectThread started")
+
             // Keep listening until exception occurs or a socket is returned.
             mmServerSocket = bluetoothAdapter?.listenUsingRfcommWithServiceRecord("JBVIDEO", UUID.fromString(VIDEO_SERVER_UUID) )
 
@@ -70,6 +73,7 @@ class VideoServerConnectThread(
 
         // Closes the connect socket and causes the thread to finish.
         fun cancel() {
+            Log.d( TAG, "VideoServer.ConnectThread cancel")
             videoServerRunnerThread?.disconnect()
             videoServerRunnerThread = null
             try {
